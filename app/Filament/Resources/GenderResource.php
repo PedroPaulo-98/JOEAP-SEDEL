@@ -20,6 +20,10 @@ use Filament\Tables\Columns\ToggleColumn;
 class GenderResource extends Resource
 {
     protected static ?string $model = Gender::class;
+    protected static ?string $label = 'Gênero';
+    protected static ?string $navigationGroup = 'Gêneros';
+    protected static ?string $navigationLabel = 'Gêneros';
+    protected static ?string $pluralModelLabel = 'Gêneros';
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
