@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\InstitutionResource\Pages;
 use App\Filament\Resources\InstitutionResource\RelationManagers;
 use App\Filament\Resources\InstitutionResource\RelationManagers\StudentRelationManager;
+use App\Filament\Resources\InstitutionResource\RelationManagers\TechnicalRelationManager;
 
 class InstitutionResource extends Resource
 {
@@ -62,6 +63,7 @@ class InstitutionResource extends Resource
     {
         return [
             StudentRelationManager::class,
+            TechnicalRelationManager::class,
         ];
     }
 

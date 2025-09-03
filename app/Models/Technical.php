@@ -4,17 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Student extends Model
+class Technical extends Model
 {
     protected $guarded = ['id'];
 
     public function institution()
     {
         return $this->belongsTo(Institution::class);
-    }
-
-    public function gender()
-    {
-        return $this->belongsTo(Gender::class);
     }
 }

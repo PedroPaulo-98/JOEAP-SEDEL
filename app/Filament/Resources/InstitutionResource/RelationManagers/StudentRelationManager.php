@@ -28,16 +28,27 @@ class StudentRelationManager extends RelationManager
                 TextInput::make('name')->label('Nome do Aluno')
                     ->required()
                     ->maxLength(255),
+
+                Select::make('gender_id')->label('Gênero')
+                    ->required()
+                    ->relationship(
+                        name: 'gender',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) => $query->where('active', true)
+                    ),
+
                 TextInput::make('age')->label('Idade do Aluno')
                     ->required()
                     ->numeric()
                     ->suffix(' anos')
                     ->minvalue(1),
+
                 TextInput::make('weight')->label('Peso do Aluno')
                     ->required()
                     ->numeric()
                     ->suffix(' kg')
                     ->minvalue(1),
+
                 Select::make('shirt_size')->label('Tamanho da Camiseta')
                     ->required()
                     ->options([
