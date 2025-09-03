@@ -2,20 +2,23 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GenderResource\Pages;
-use App\Filament\Resources\GenderResource\RelationManagers;
-use App\Models\Gender;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use App\Models\Gender;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Filament\Forms\Components\TextInput;
+use Filament\Resources\Resource;
 use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ToggleColumn;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\GenderResource\Pages;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\GenderResource\RelationManagers;
 
 class GenderResource extends Resource
 {
@@ -35,18 +38,33 @@ class GenderResource extends Resource
                     ->required()
                     ->maxLength(255)
                     ->label('Gênero'),
+
                 TextInput::make('abbreviation')
                     ->required()
                     ->maxLength(255)
                     ->label('Abreviação'),
-                Toggle::make('sport_modality')
-                    ->required()
-                    ->default(true)
-                    ->label('Modalidade Esportiva?'),
+
                 Toggle::make('active')
                     ->required()
                     ->default(true)
-                    ->label('Ativo?'),
+                    ->label('Ativo?')
+                    ->live()
+                    ->afterStateUpdated(function ($state, Set $set) {
+                        if (!$state) {
+                            $set('sport_modality', false);
+                        }
+                    }),
+
+                Toggle::make('sport_modality')
+                    ->required()
+                    ->default(true)
+                    ->label('Modalidade Esportiva?')
+                    ->disabled(fn(Get $get): bool => !$get('active'))
+                    ->dehydrated(true) // Sempre envia o valor
+                    ->dehydrateStateUsing(function ($state, Get $get) {
+                        // Força false se active for false
+                        return $get('active') ? $state : false;
+                    }),
             ]);
     }
 
@@ -58,15 +76,20 @@ class GenderResource extends Resource
                     ->label('Gênero')
                     ->searchable()
                     ->sortable(),
+
                 TextColumn::make('abbreviation')
                     ->label('Abreviação')
                     ->searchable()
                     ->sortable(),
-                ToggleColumn::make('sport_modality')
+
+                IconColumn::make('sport_modality')
                     ->label('Modalidade Esportiva?')
+                    ->boolean()
                     ->sortable(),
-                ToggleColumn::make('active')
+
+                IconColumn::make('active')
                     ->label('Ativo?')
+                    ->boolean()
                     ->sortable(),
             ])
             ->filters([
