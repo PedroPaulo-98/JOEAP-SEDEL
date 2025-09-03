@@ -35,7 +35,11 @@ class SportRelationManager extends RelationManager
                 Select::make('gender_id')
                     ->label('Gênero')
                     ->required()
-                    ->relationship('gender', 'name'),
+                    ->relationship(
+                        name: 'gender',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn($query) => $query->where('sport_modality', true)
+                    ),
 
                 TextInput::make('min_age')
                     ->label('Idade Mínima')
