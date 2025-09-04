@@ -24,7 +24,7 @@ class InstitutionResource extends Resource
     protected static ?string $navigationGroup = 'Instituições/Escolas';
     protected static ?string $navigationLabel = 'Instituições/Escolas';
     protected static ?string $pluralModelLabel = 'Instituições/Escolas';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'phosphor-building-apartment';
 
     public static function form(Form $form): Form
     {

@@ -22,7 +22,7 @@ class SportResource extends Resource
     protected static ?string $navigationGroup = 'Esportes';
     protected static ?string $navigationLabel = 'Esportes';
     protected static ?string $pluralModelLabel = 'Esportes';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'phosphor-court-basketball';
 
     public static function form(Form $form): Form
     {

@@ -28,7 +28,7 @@ class GenderResource extends Resource
     protected static ?string $navigationLabel = 'Gêneros';
     protected static ?string $pluralModelLabel = 'Gêneros';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'phosphor-gender-intersex';
 
     public static function form(Form $form): Form
     {
@@ -44,17 +44,6 @@ class GenderResource extends Resource
                     ->maxLength(255)
                     ->label('Abreviação'),
 
-                Toggle::make('active')
-                    ->required()
-                    ->default(true)
-                    ->label('Ativo?')
-                    ->live()
-                    ->afterStateUpdated(function ($state, Set $set) {
-                        if (!$state) {
-                            $set('sport_modality', false);
-                        }
-                    }),
-
                 Toggle::make('sport_modality')
                     ->required()
                     ->default(true)
@@ -64,6 +53,17 @@ class GenderResource extends Resource
                     ->dehydrateStateUsing(function ($state, Get $get) {
                         // Força false se active for false
                         return $get('active') ? $state : false;
+                    }),
+
+                Toggle::make('active')
+                    ->required()
+                    ->default(true)
+                    ->label('Ativo?')
+                    ->live()
+                    ->afterStateUpdated(function ($state, Set $set) {
+                        if (!$state) {
+                            $set('sport_modality', false);
+                        }
                     }),
             ]);
     }
