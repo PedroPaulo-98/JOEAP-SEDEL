@@ -17,4 +17,9 @@ class Institution extends Model
     {
         return $this->hasMany(Technical::class);
     }
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
+    }
 }

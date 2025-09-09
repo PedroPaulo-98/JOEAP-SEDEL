@@ -8,7 +8,9 @@ use Filament\Tables;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
@@ -17,7 +19,6 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
-
 
 class UserResource extends Resource
 {
@@ -32,9 +33,18 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
+                Select::make('institution_id')->label('Instituição Vinculada')
+                    ->preload()
+                    ->required()
+                    ->searchable()
+                    ->relationship('institution', 'name'),
+
                 TextInput::make('name')->label('Nome do Usuário')
                     ->required(),
-                TextInput::make('email')->label('Email do Usuário'),
+
+                TextInput::make('email')->label('Email do Usuário')
+                    ->required(),
+
                 TextInput::make('password')
                     ->label('Senha')
                     ->password()
@@ -54,6 +64,19 @@ class UserResource extends Resource
                         }
                         return null;
                     }),
+
+                Select::make('roles')
+                    ->label('Função')
+                    ->relationship(
+                        name: 'roles',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn(Builder $query) => $query->where('guard_name', 'web')
+                    )
+                    ->options(Role::all()->pluck('name', 'id')) // Carrega todas as roles
+                    ->multiple(false) // Para seleção única
+                    ->required()
+                    ->default(fn() => Role::where('name', 'super_admin')->first()?->id),
+
                 Section::make('Redefinição de Senha')
                     ->schema([
                         Forms\Components\Actions::make([
