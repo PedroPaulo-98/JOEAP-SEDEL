@@ -180,19 +180,4 @@ class UserResource extends Resource
         // Se não for super_admin, retorna apenas o próprio usuário
         return $query->where('id', $user->id);
     }
-
-    public static function canViewAny(): bool
-    {
-        return Auth::check();
-    }
-
-    public static function canCreate(): bool
-    {
-        return false;
-    }
-
-    public static function canDelete($record): bool
-    {
-        return false;
-    }
 }
