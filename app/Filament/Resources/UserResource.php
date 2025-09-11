@@ -19,13 +19,22 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\RelationManagers;
+use Filament\Resources\RelationManagers\RelationManager;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
     protected static ?string $label = 'Usuário';
     protected static ?string $navigationGroup = 'Usuários';
-    protected static ?string $navigationLabel = 'Usuários';
+    // protected static ?string $navigationLabel = 'Usuários';
+    public static function getNavigationLabel(): string
+    {
+        if (Auth::check() && Auth::user()->hasRole('super_admin')) {
+            return 'Usuários';
+        }
+
+        return 'Meu Perfil';
+    }
     protected static ?string $pluralModelLabel = 'Usuários';
     protected static ?string $navigationIcon = 'phosphor-user';
 
@@ -33,9 +42,9 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('institution_id')->label('Instituição Vinculada')
+                Select::make('institution')->label('Instituição Vinculada')
                     ->preload()
-                    ->required()
+                    ->multiple(true)
                     ->searchable()
                     ->relationship('institution', 'name'),
 
@@ -49,21 +58,17 @@ class UserResource extends Resource
                     ->label('Senha')
                     ->password()
                     ->revealable()
-                    ->required(fn($operation) => $operation === 'create')
-                    ->visible(function ($record, $operation) {
-                        if ($operation === 'create') return true;
-                        return Auth::check() && Auth::id() === $record->id;
-                    })
-                    ->disabled(function ($record, $operation) {
-                        if ($operation === 'create') return false;
-                        return Auth::id() !== $record->id;
-                    })
-                    ->helperText(function ($record, $operation) {
-                        if ($operation === 'edit' && Auth::id() !== $record->id) {
-                            return 'Apenas o próprio usuário pode alterar sua senha.';
-                        }
-                        return null;
-                    }),
+                    ->required(fn(string $operation): bool => $operation === 'create')
+                    ->dehydrated(fn($state) => filled($state))
+                    // ->nullable()
+                    ->disabled(
+                        fn($record, $operation): bool =>
+                        $operation === 'edit' && Auth::id() !== $record->id
+                    )
+                    ->visible(
+                        fn($record, $operation): bool =>
+                        $operation === 'create' || Auth::id() === $record->id
+                    ),
 
                 Select::make('roles')
                     ->label('Função')
@@ -72,8 +77,8 @@ class UserResource extends Resource
                         titleAttribute: 'name',
                         modifyQueryUsing: fn(Builder $query) => $query->where('guard_name', 'web')
                     )
-                    ->options(Role::all()->pluck('name', 'id')) // Carrega todas as roles
-                    ->multiple(false) // Para seleção única
+                    ->options(Role::all()->pluck('name', 'id'))
+                    ->multiple(false)
                     ->required()
                     ->default(fn() => Role::where('name', 'super_admin')->first()?->id),
 
@@ -142,5 +147,34 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = Auth::user();
+
+        // Se for super_admin, retorna todos os usuários
+        if ($user->hasRole('super_admin')) {
+            return $query;
+        }
+
+        // Se não for super_admin, retorna apenas o próprio usuário
+        return $query->where('id', $user->id);
+    }
+
+    public static function canViewAny(): bool
+    {
+        return Auth::check();
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
+    }
+
+    public static function canDelete($record): bool
+    {
+        return false;
     }
 }
