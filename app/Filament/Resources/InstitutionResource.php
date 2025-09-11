@@ -11,7 +11,9 @@ use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Auth;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\CreateAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Wizard\Step;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\InstitutionResource\Pages;
 use App\Filament\Resources\InstitutionResource\RelationManagers;
@@ -58,6 +60,9 @@ class InstitutionResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                //
             ]);
     }
 
@@ -76,5 +81,20 @@ class InstitutionResource extends Resource
             'create' => Pages\CreateInstitution::route('/create'),
             'edit' => Pages\EditInstitution::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user->hasRole('super_admin')) {
+            return $query;
+        }
+
+        // Filtra apenas as instituições do usuário
+        return $query->whereHas('user', function ($q) use ($user) {
+            $q->where('users.id', $user->id);
+        });
     }
 }
