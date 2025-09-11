@@ -42,48 +42,34 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Select::make('institution')->label('Instituição Vinculada')
-                    ->preload()
-                    ->multiple(true)
-                    ->searchable()
-                    ->relationship('institution', 'name'),
-
-                TextInput::make('name')->label('Nome do Usuário')
-                    ->required(),
-
-                TextInput::make('email')->label('Email do Usuário')
-                    ->required(),
-
-                TextInput::make('password')
-                    ->label('Senha')
-                    ->password()
-                    ->revealable()
-                    ->required(fn(string $operation): bool => $operation === 'create')
-                    ->dehydrated(fn($state) => filled($state))
-                    // ->nullable()
-                    ->disabled(
-                        fn($record, $operation): bool =>
-                        $operation === 'edit' && Auth::id() !== $record->id
-                    )
-                    ->visible(
-                        fn($record, $operation): bool =>
-                        $operation === 'create' || Auth::id() === $record->id
-                    ),
-
-                Select::make('roles')
-                    ->label('Função')
-                    ->relationship(
-                        name: 'roles',
-                        titleAttribute: 'name',
-                        modifyQueryUsing: fn(Builder $query) => $query->where('guard_name', 'web')
-                    )
-                    ->options(Role::all()->pluck('name', 'id'))
-                    ->multiple(false)
-                    ->required()
-                    ->default(fn() => Role::where('name', 'super_admin')->first()?->id),
-
-                Section::make('Redefinição de Senha')
+                Section::make('Dados do Usuário')
                     ->schema([
+                        TextInput::make('name')->label('Nome do Usuário')
+                            ->required(),
+
+                        TextInput::make('email')->label('Email do Usuário')
+                            ->required(),
+                    ])
+                    ->columns(2)
+                    ->columnSpanFull(),
+
+                Section::make('Segurança')
+                    ->schema([
+                        TextInput::make('password')
+                            ->label('Senha')
+                            ->password()
+                            ->revealable()
+                            ->required(fn(string $operation): bool => $operation === 'create')
+                            ->dehydrated(fn($state) => filled($state))
+                            // ->nullable()
+                            ->disabled(
+                                fn($record, $operation): bool =>
+                                $operation === 'edit' && Auth::id() !== $record->id
+                            )
+                            ->visible(
+                                fn($record, $operation): bool =>
+                                $operation === 'create' || Auth::id() === $record->id
+                            ),
                         Forms\Components\Actions::make([
                             Forms\Components\Actions\Action::make('quickResetPassword')
                                 ->label('Resetar Senha')
@@ -104,10 +90,42 @@ class UserResource extends Resource
                                         ->success()
                                         ->send();
                                 })
-                        ])
+                        ])->visible(function ($record, $operation) {
+                            return $operation === 'edit' && Auth::id() !== $record->id;
+                        })
                     ])
+                    ->columns(2)
+                    ->columnSpanFull(),
+
+                Section::make('Instituições/Escolas Vincualdas ao Usuário')
+                    ->schema([
+                        Select::make('institution')->label('Instituição Vinculada')
+                            ->preload()
+                            ->multiple(true)
+                            ->searchable()
+                            ->relationship('institution', 'name'),
+                    ])
+                    ->columns(1)
+                    ->columnSpanFull(),
+
+                Section::make('Permissões do Usuário')
+                    ->schema([
+                        Select::make('roles')
+                            ->label('Função')
+                            ->relationship(
+                                name: 'roles',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn(Builder $query) => $query->where('guard_name', 'web')
+                            )
+                            ->options(Role::all()->pluck('name', 'id'))
+                            ->multiple(false)
+                            ->required()
+                            ->default(fn() => Role::where('name', 'super_admin')->first()?->id),
+                    ])
+                    ->columns(1)
+                    ->columnSpanFull()
                     ->visible(function ($record, $operation) {
-                        return $operation === 'edit' && Auth::id() !== $record->id;
+                        return Auth::check() && Auth::user()->hasRole('super_admin');
                     }),
             ]);
     }
