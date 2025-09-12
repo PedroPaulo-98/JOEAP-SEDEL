@@ -37,7 +37,7 @@ class InstitutionResource extends Resource
                     ->required()
                     ->label('Nome da Instituição/Escola')
                     ->maxLength(255),
-            ]);
+            ])->disabled(fn() => !Auth::user()->hasRole('super_admin'));
     }
 
     public static function table(Table $table): Table
@@ -55,6 +55,7 @@ class InstitutionResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -80,6 +81,7 @@ class InstitutionResource extends Resource
             'index' => Pages\ListInstitutions::route('/'),
             'create' => Pages\CreateInstitution::route('/create'),
             'edit' => Pages\EditInstitution::route('/{record}/edit'),
+            'view' => Pages\ViewInstitution::route('/{record}'),
         ];
     }
 
