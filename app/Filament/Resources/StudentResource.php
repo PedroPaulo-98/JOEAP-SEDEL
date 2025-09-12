@@ -122,4 +122,19 @@ class StudentResource extends Resource
             'edit' => Pages\EditStudent::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user->hasRole('super_admin')) {
+            return $query;
+        }
+
+        // Filtra apenas os estudantes da instituição do usuário
+        return $query->whereHas('institution.user', function ($q) use ($user) {
+            $q->where('users.id', $user->id);
+        });
+    }
 }
