@@ -67,7 +67,19 @@ class StudentResource extends Resource
                     ->required()
                     ->searchable()
                     ->preload()
-                    ->relationship('institution', 'name')
+                    ->relationship(
+                        name: 'institution',
+                        titleAttribute: 'name',
+                        modifyQueryUsing: function (Builder $query) {
+                            $user = auth()->user();
+
+                            if ($user->hasRole('super_admin')) {
+                                return $query;
+                            }
+
+                            return $query->whereHas('user', fn($q) => $q->where('users.id', $user->id));
+                        }
+                    )
             ]);
     }
 
