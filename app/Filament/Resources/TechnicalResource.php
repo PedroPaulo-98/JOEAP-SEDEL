@@ -26,10 +26,10 @@ class TechnicalResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('institution_id')
+                Forms\Components\Select::make('institution_id')->label('Instituição/Escola')
                     ->relationship('institution', 'name')
                     ->required(),
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('name')->label('Nome do Técnico')
                     ->required()
                     ->maxLength(255),
             ]);
@@ -64,5 +64,16 @@ class TechnicalResource extends Resource
         return [
             'index' => Pages\ManageTechnicals::route('/'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        if ($user->hasRole('super_admin')) {
+            return $query;
+        }
+        return $query->whereHas('institution', fn($q) => $q->whereHas('user', fn($q) => $q->where('users.id', $user->id)));
     }
 }
