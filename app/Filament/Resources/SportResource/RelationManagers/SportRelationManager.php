@@ -25,10 +25,9 @@ class SportRelationManager extends RelationManager
     {
         return $form
             ->schema([
-
                 TextInput::make('name')
                     ->label('Nome da Modalidade')
-                    ->placeholder('Sub-17....')
+                    ->placeholder('Sub-17...')
                     ->required()
                     ->maxLength(255),
 

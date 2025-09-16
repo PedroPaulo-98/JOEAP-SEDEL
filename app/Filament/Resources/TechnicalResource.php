@@ -2,16 +2,18 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\TechnicalResource\Pages;
-use App\Filament\Resources\TechnicalResource\RelationManagers;
-use App\Models\Technical;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Forms\Form;
+use App\Models\Technical;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\TechnicalResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\TechnicalResource\RelationManagers;
 
 class TechnicalResource extends Resource
 {
@@ -26,10 +28,10 @@ class TechnicalResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('institution_id')->label('Instituição/Escola')
+                Select::make('institution_id')->label('Instituição/Escola')
                     ->relationship('institution', 'name')
                     ->required(),
-                Forms\Components\TextInput::make('name')->label('Nome do Técnico')
+                TextInput::make('name')->label('Nome do Técnico')
                     ->required()
                     ->maxLength(255),
             ]);

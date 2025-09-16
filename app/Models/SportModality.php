@@ -17,4 +17,9 @@ class SportModality extends Model
     {
         return $this->belongsTo(Gender::class);
     }
+
+    public function enrollments()
+    {
+        return $this->belongsToMany(Enrollment::class, 'enrollment_student');
+    }
 }
