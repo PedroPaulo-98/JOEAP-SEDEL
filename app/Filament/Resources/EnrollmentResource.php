@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Tables;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Forms\Form;
 use App\Models\Enrollment;
 use Filament\Tables\Table;
@@ -13,8 +15,8 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\EnrollmentResource\Pages;
-use App\Filament\Resources\EnrollmentResource\RelationManagers;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use App\Filament\Resources\EnrollmentResource\RelationManagers;
 
 class EnrollmentResource extends Resource
 {
@@ -31,12 +33,35 @@ class EnrollmentResource extends Resource
             ->schema([
                 Select::make('event_id')
                     ->label('Evento')
+                    ->searchable()
+                    ->preload()
                     ->relationship('event', 'name')
                     ->required(),
+
                 Select::make('sport_id')
                     ->label('Esporte')
+                    ->searchable()
+                    ->preload()
                     ->required()
+                    ->live()
+                    ->afterStateUpdated(fn(Set $set) => $set('sport_modality_id', null))
                     ->relationship('sport', 'name'),
+
+                Select::make('sport_modality_id')
+                    ->label('Modalidade')
+                    ->required()
+                    ->options(function (Get $get) {
+                        $sportId = $get('sport_id');
+
+                        if (!$sportId) {
+                            return [];
+                        }
+
+                        return \App\Models\SportModality::where('sport_id', $sportId)
+                            ->pluck('name', 'id');
+                    })
+                    ->searchable()
+                    ->preload(),
             ])->disabled(auth()->user()->hasRole('super_admin') ? false : true);
     }
 
@@ -46,6 +71,8 @@ class EnrollmentResource extends Resource
             ->columns([
                 TextColumn::make('event.name')->label('Evento')->sortable()->searchable(),
                 TextColumn::make('sport.name')->label('Esporte')->sortable()->searchable(),
+                TextColumn::make('sport.sportModality.name')->label('Mod. - Nome')->sortable()->searchable(),
+                TextColumn::make('sport.sportModality.gender.name')->label('Mod. - Gênero')->sortable()->searchable(),
             ])
             ->filters([
                 //
