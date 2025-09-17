@@ -21,9 +21,11 @@ class EnrollmentsChart extends ApexChartWidget
     {
         return [
             DatePicker::make('date_start')
-                ->default(Carbon::now()->subDays(6)), // Define o padrão para o início do ano atual
+                ->default(Carbon::now()->subDays(6))
+                ->label('De'), // Define o padrão para o início do ano atual
             DatePicker::make('date_end')
-                ->default(Carbon::now()->endOfDay()), // Define o padrão para o final do dia atual
+                ->default(Carbon::now()->endOfDay())
+                ->label('Até'), // Define o padrão para o final do dia atual
         ];
     }
 
