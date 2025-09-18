@@ -71,8 +71,8 @@ class EnrollmentResource extends Resource
             ->columns([
                 TextColumn::make('event.name')->label('Evento')->sortable()->searchable(),
                 TextColumn::make('sport.name')->label('Esporte')->sortable()->searchable(),
-                TextColumn::make('sport.sportModality.name')->label('Mod. - Nome')->sortable()->searchable(),
-                TextColumn::make('sport.sportModality.gender.name')->label('Mod. - Gênero')->sortable()->searchable(),
+                TextColumn::make('sportModality.name')->label('Mod. - Nome')->sortable()->searchable(),
+                TextColumn::make('sportModality.gender.name')->label('Mod. - Gênero')->sortable()->searchable(),
             ])
             ->filters([
                 //

@@ -18,6 +18,11 @@ class Enrollment extends Model
         return $this->belongsTo(Sport::class);
     }
 
+    public function sportModality()
+    {
+        return $this->belongsTo(SportModality::class);
+    }
+
     public function enrollmentStudents()
     {
         return $this->hasMany(EnrollmentStudent::class);
