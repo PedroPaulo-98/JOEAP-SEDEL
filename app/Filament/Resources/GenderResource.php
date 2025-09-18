@@ -27,8 +27,9 @@ class GenderResource extends Resource
     protected static ?string $navigationGroup = 'Gêneros';
     protected static ?string $navigationLabel = 'Gêneros';
     protected static ?string $pluralModelLabel = 'Gêneros';
-
     protected static ?string $navigationIcon = 'phosphor-gender-intersex';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

@@ -24,10 +24,12 @@ class InstitutionResource extends Resource
 {
     protected static ?string $model = Institution::class;
     protected static ?string $label = 'Instituição/Escola';
-    protected static ?string $navigationGroup = 'Instituições/Escolas';
+    protected static ?string $navigationGroup = 'Institucional';
     protected static ?string $navigationLabel = 'Instituições/Escolas';
     protected static ?string $pluralModelLabel = 'Instituições/Escolas';
     protected static ?string $navigationIcon = 'phosphor-building-apartment';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

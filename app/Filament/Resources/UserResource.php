@@ -25,7 +25,7 @@ class UserResource extends Resource
 {
     protected static ?string $model = User::class;
     protected static ?string $label = 'Usuário';
-    protected static ?string $navigationGroup = 'Usuários';
+    protected static ?string $navigationGroup = 'Administrativo';
     // protected static ?string $navigationLabel = 'Usuários';
     public static function getNavigationLabel(): string
     {
@@ -37,6 +37,8 @@ class UserResource extends Resource
     }
     protected static ?string $pluralModelLabel = 'Usuários';
     protected static ?string $navigationIcon = 'phosphor-user';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {

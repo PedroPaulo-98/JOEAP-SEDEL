@@ -19,10 +19,12 @@ class SportResource extends Resource
 {
     protected static ?string $model = Sport::class;
     protected static ?string $label = 'Esporte';
-    protected static ?string $navigationGroup = 'Esportes';
+    protected static ?string $navigationGroup = 'Eventos';
     protected static ?string $navigationLabel = 'Esportes';
     protected static ?string $pluralModelLabel = 'Esportes';
     protected static ?string $navigationIcon = 'phosphor-court-basketball';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {

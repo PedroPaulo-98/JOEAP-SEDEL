@@ -20,10 +20,13 @@ class StudentResource extends Resource
 {
     protected static ?string $model = Student::class;
     protected static ?string $label = 'Estudante';
-    protected static ?string $navigationGroup = 'Estudantes';
+    protected static ?string $navigationGroup = 'Institucional';
     protected static ?string $navigationLabel = 'Estudantes';
     protected static ?string $pluralModelLabel = 'Estudantes';
     protected static ?string $navigationIcon = 'phosphor-student';
+
+    protected static ?int $navigationSort = 2;
+
 
     public static function form(Form $form): Form
     {

@@ -22,10 +22,12 @@ class EnrollmentResource extends Resource
 {
     protected static ?string $model = Enrollment::class;
     protected static ?string $label = 'Inscrição';
-    protected static ?string $navigationGroup = 'Inscrições';
+    protected static ?string $navigationGroup = 'Eventos';
     protected static ?string $navigationLabel = 'Inscrições';
     protected static ?string $pluralModelLabel = 'Inscrições';
     protected static ?string $navigationIcon = 'phosphor-list-checks';
+
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
