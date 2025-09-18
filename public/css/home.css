@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.companies {
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 75rem;
+
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.section-title h2 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 0.5rem;
+    letter-spacing: 1px;
+}
+
+.section-title p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+/* Container dos cards */
+.systems-container {
+    display: flex;
+    gap: 1rem;
+    overflow: visible; /* garante que o card não seja cortado */
+    scroll-snap-type: x mandatory;
+
+    cursor: pointer;
+}
+
+.systems-container::-webkit-scrollbar {
+    height: 8px;
+}
+
+.systems-container::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 4px;
+}
+
+/* Cada card */
+.card {
+    flex: 0 0 220px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    text-align: center;
+    scroll-snap-align: start;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    overflow: visible;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+/* Ver mais */
+
+.see-more a {
+    text-decoration: none;
+    color: #0077cc;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.see-more a:hover {
+    color: #005fa3;
+}
+
+.distance {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+}
