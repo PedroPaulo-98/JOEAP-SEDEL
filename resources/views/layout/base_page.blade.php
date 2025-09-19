@@ -68,19 +68,19 @@
       <!-- Localização -->
       <div class="footer-section">
         <h3>Localização</h3>
-        <p>Rua Exemplo, 123<br>Cidade - Estado<br>CEP 00000-000</p>
+        <p>R. Hildemar Maia, n. 1497<br>Macapá, Amapá.<br>Santa Rita. CEP: 68.901-271</p>
       </div>
 
       <!-- Contato -->
       <div class="footer-section">
         <h3>Contato</h3>
-        <p>Email: contato@empresa.com</p>
-        <p>Tel: (11) 99999-9999</p>
+        <p>Email: sedel@sedel.ap.gov.br</p>
+        <p>Central: (96) 4009-9650</p>
       </div>
 
       <!-- Redes sociais -->
       <div class="footer-section">
-        <h3>Siga a JOEAP</h3>
+        <h3>Siga a SEDEL</h3>
         <div class="social-icons">
           <a href="#"><i class="ri-facebook-circle-fill"></i></a>
           <a href="#"><i class="ri-instagram-fill"></i></a>
@@ -93,11 +93,12 @@
 
     <!-- Direitos reservados -->
     <div class="footer-bottom">
-      <p>&copy; 2025 JOEAP. Todos os direitos reservados.</p>
+      <p>&copy; 2025 SEDEL. Todos os direitos reservados.</p>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ asset('js/sports_events.js') }}" type="module"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 .footer {
-    background: #333;
+    background: black;
     color: #eee;
     padding: 2.5rem 1rem 1rem;
     margin-top: 3rem;
@@ -45,7 +45,8 @@
     border-top: 1px solid #555;
     text-align: center;
     padding-top: 1rem;
-    margin-top: 2rem;
+    margin: 2rem auto;
+    width: 100%;
 }
 
 .footer-bottom p {

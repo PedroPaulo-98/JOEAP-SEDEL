@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Sport;
 use App\Models\SportModality;
 use App\Models\Event;
-use App\Models\Sport;
 
 class PagesController extends Controller
 {
     public function home()
     {
         $route = 'home';
+
+        // Agora sim: Esportes de verdade
+        $sports = Sport::with('sportModality')->get();
+
+        // Se ainda quiser pegar modalidades soltas:
         $sport_modalities = SportModality::all();
-        $sports = Sport::all();
+
         $events = Event::all();
-        // $Competitions = Competition::all();
-        // dd($sport_modalities);
-        return view('pages.home', compact('sport_modalities','sports', 'events'));
+
+        return view('pages.home', compact('sports', 'sport_modalities', 'events'));
     }
 }
