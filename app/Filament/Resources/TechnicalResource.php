@@ -19,10 +19,13 @@ class TechnicalResource extends Resource
 {
     protected static ?string $model = Technical::class;
     protected static ?string $label = 'Técnico';
-    protected static ?string $navigationGroup = 'Técnicos';
+    protected static ?string $navigationGroup = 'Institucional';
     protected static ?string $navigationLabel = 'Técnicos';
     protected static ?string $pluralModelLabel = 'Técnicos';
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?int $navigationSort = 2;
+
 
     public static function form(Form $form): Form
     {
