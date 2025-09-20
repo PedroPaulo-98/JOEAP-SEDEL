@@ -3,9 +3,12 @@
 @section('title', 'Página Inicial')
 
 @section('content')
-<header class="hero">
+<header class="hero" style="background: url('{{ $texts->getText('banner') }}') top center; background-size: cover;">
     <div class="hero-content">
-        <h1>MAPA DOS ESPORTES</h1>
+        <h1>
+            {{ $texts->getText('banner_title') }}
+            <br>{{ $texts->getText('subtitle_banner') }}
+        </h1>
     </div>
 </header>
 

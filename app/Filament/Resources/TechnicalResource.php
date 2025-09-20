@@ -22,7 +22,7 @@ class TechnicalResource extends Resource
     protected static ?string $navigationGroup = 'Institucional';
     protected static ?string $navigationLabel = 'Técnicos';
     protected static ?string $pluralModelLabel = 'Técnicos';
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-hand-raised';
 
     protected static ?int $navigationSort = 2;
 

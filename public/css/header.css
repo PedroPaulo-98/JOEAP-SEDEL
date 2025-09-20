@@ -1,7 +1,7 @@
 /* Hero header */
 .hero {
   height: 30vh; /* ocupa 80% da altura da tela */
-  background: #333; /* fundo cinza */
+  /*background: ; /* fundo cinza  Trocar para ficar dinamico*/
   display: flex;
   justify-content: center;
   align-items: center;
